@@ -6,7 +6,7 @@ import os
 
 seg_len = 5
 seg_num = 60
-target_shape=(960, 64)
+target_shape = (960, 64)
 
 sound_file = '6608400G.wav'
 sr, wav_data = wavfile.read(sound_file)

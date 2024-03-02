@@ -140,5 +140,5 @@ def training(model, train_dl, num_epochs):
     print('Finished Training')
 
 
-num_epochs = 25
+num_epochs = 5
 training(myModel, train_dl, num_epochs)
