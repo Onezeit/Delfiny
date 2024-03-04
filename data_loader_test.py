@@ -11,8 +11,7 @@ import torch
 
 
 class_to_idx = {
-    'Orka': 0,
-    'Humbak': 1,
+    'Orka_test': 0,
 }
 
 
@@ -33,6 +32,7 @@ class SoundDS(Dataset):
         wav_data = wav_data / 32768.0
         cur_spectro = preprocess_sound(wav_data, sr)
 
+        # Dopasowanie rozmiaru spektrogramu
         cur_spectro_padded = np.zeros(self.target_shape)
         min_time_frames = min(self.target_shape[0], cur_spectro.shape[0])
         min_mel_bands = min(self.target_shape[1], cur_spectro.shape[1])

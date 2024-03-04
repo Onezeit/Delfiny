@@ -1,52 +1,35 @@
 import torch
+from torch.utils.data import DataLoader
+from data_loader_test import SoundDS
 from Model import AudioClassifier
-from torch.utils.data import DataLoader, Dataset, random_split
-from data_loader import SoundDS
-
-myds = SoundDS('Samples/Orka')
-
-# Random split of 80:20 between training and validation
-num_items = len(myds)
-num_train = round(num_items * 0.8)
-num_val = num_items - num_train
-train_ds, val_ds = random_split(myds, [num_train, num_val])
-
-train_dl = torch.utils.data.DataLoader(train_ds, batch_size=8, shuffle=True)
-val_dl = torch.utils.data.DataLoader(val_ds, batch_size=8, shuffle=False)
 
 
-def inference(model, val_dl):
-    correct_prediction = 0
-    total_prediction = 0
+def load_model(model_path):
+    model = AudioClassifier()
+    model.load_state_dict(torch.load(model_path))
+    model.eval()
+    return model
 
-    # Disable gradient updates
+
+test_data_path = 'Samples/Orka_test'
+model_path = 'audio_classifier_weights.pth'
+input_data = SoundDS(test_data_path)
+valid_dl = torch.utils.data.DataLoader(input_data, batch_size=8, shuffle=True)
+
+
+def test_model(model, input_data):
+    correct = 0
+    total = 0
     with torch.no_grad():
-        for data in val_dl:
-            # Get the input features and target labels, and put them on the GPU
-            inputs, labels = data[0].to(device), data[1].to(device)
-
-            # Normalize the inputs
-            inputs_m, inputs_s = inputs.mean(), inputs.std()
-            inputs = (inputs - inputs_m) / inputs_s
-
-            # Get predictions
+        for data in input_data:
+            inputs, labels = data[0], data[1]
             outputs = model(inputs)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
 
-            # Get the predicted class with the highest score
-            _, prediction = torch.max(outputs, 1)
-            # Count of predictions that matched the target label
-            correct_prediction += (prediction == labels).sum().item()
-            total_prediction += prediction.shape[0]
+    print(f'Accuracy of the model on the test audio files: {100 * correct / total}%')
 
-    acc = correct_prediction / total_prediction
-    print(f'Accuracy: {acc:.2f}, Total items: {total_prediction}')
 
-# Create the model and put it on the GPU if available
-myModel = AudioClassifier()
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-myModel = myModel.to(device)
-# Check that it is on Cuda
-next(myModel.parameters()).device
-
-# Run inference on trained model with the validation set
-inference(myModel, val_dl)
+model = load_model(model_path)
+test_model(model, valid_dl)
