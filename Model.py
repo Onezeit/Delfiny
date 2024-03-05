@@ -1,5 +1,6 @@
 import torch.nn as nn
 from torch.nn import init
+import torch.nn.functional as F
 
 
 class AudioClassifier(nn.Module):
@@ -37,17 +38,20 @@ class AudioClassifier(nn.Module):
         self.conv4.bias.data.zero_()
         conv_layers += [self.conv4, self.relu4, self.bn4]
 
-        self.ap = nn.AdaptiveAvgPool2d(output_size=1)
-        self.lin = nn.Linear(in_features=64, out_features=2)
-
+        self.ap = nn.AdaptiveAvgPool2d(output_size=(1, 1))
+        self.fc1 = nn.Linear(64, 128)
+        self.fc2 = nn.Linear(128, 64)
+        self.fc3 = nn.Linear(64, 32)
+        self.fc4 = nn.Linear(32, 2)
         self.conv = nn.Sequential(*conv_layers)
 
     def forward(self, x):
         x = self.conv(x)
-
         x = self.ap(x)
-        x = x.view(x.shape[0], -1)
-
-        x = self.lin(x)
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+        x = self.fc4(x)
 
         return x

@@ -24,7 +24,7 @@ next(myModel.parameters()).device
 
 def training(model, train_dl, num_epochs):
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
     scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.001,
                                                     steps_per_epoch=int(len(train_dl)),
                                                     epochs=num_epochs,
@@ -58,13 +58,12 @@ def training(model, train_dl, num_epochs):
         num_batches = len(train_dl)
         avg_loss = running_loss / num_batches
         acc = correct_prediction / total_prediction
-        print(f"Running loss: {running_loss}")
         print(f"Correct: {correct_prediction}")
         print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {acc:.2f}')
 
     print('Finished Training')
 
 
-num_epochs = 10
+num_epochs = 25
 training(myModel, train_dl, num_epochs)
 torch.save(myModel.state_dict(), 'audio_classifier_weights.pth')

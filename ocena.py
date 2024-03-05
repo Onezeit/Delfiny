@@ -16,7 +16,7 @@ def load_model(model_path):
     return model
 
 
-def predict_with_confidence_threshold(outputs, threshold=0.7):
+def predict_with_confidence_threshold(outputs, threshold=0.6):
     probabilities = torch.softmax(outputs, dim=1)
     max_probs, predictions = torch.max(probabilities, dim=1)
     uncertain = max_probs < threshold
