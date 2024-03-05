@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 import wave
 import sys
 
-def record_audio(output_filename, duration=10, channels=1, sample_rate=44100):
+
+def record_audio(output_filename, duration=25, channels=1, sample_rate=44100):
     p = pyaudio.PyAudio()
 
     # Ustawienia nagrywania
@@ -40,6 +41,7 @@ def record_audio(output_filename, duration=10, channels=1, sample_rate=44100):
 
     print(f"Nagranie zapisane jako {output_filename}")
 
+
 def get_website_content(url):
     response = requests.get(url)
     if response.status_code == 200:
@@ -47,6 +49,7 @@ def get_website_content(url):
     else:
         print(f"Błąd podczas pobierania strony. Kod statusu: {response.status_code}")
         return None
+
 
 def main():
     url = "https://live.orcasound.net/listen/"
@@ -75,11 +78,12 @@ def main():
     website_url = url + key
     print(website_url)
 
-    output_filename = "output.wav"
+    output_filename = "LiveSamples/output.wav"
     website_content = get_website_content(website_url)
 
     if website_content:
         record_audio(output_filename)
+
 
 if __name__ == "__main__":
     main()

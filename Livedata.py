@@ -3,6 +3,7 @@ import time
 import re
 import os
 
+
 def read_latest_txt(latest_txt_url):
     try:
         response = requests.get(latest_txt_url)
@@ -12,6 +13,7 @@ def read_latest_txt(latest_txt_url):
     except Exception as e:
         print(f"Błąd: {e}")
         return None
+
 
 def get_last_live_number(m3u8_url):
     try:
@@ -24,6 +26,7 @@ def get_last_live_number(m3u8_url):
     except Exception as e:
         print(f"Błąd: {e}")
         return None
+
 
 def download_live_samples(base_url, output_directory, latest_number, interval_seconds=10, max_attempts=3, keep_latest_n=10):
     try:

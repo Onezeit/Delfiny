@@ -8,12 +8,12 @@ seg_len = 5
 seg_num = 60
 target_shape = (960, 64)
 
-sound_file = '6608400G.wav'
+sound_file = 'oboj_piano.wav'
 sr, wav_data = wavfile.read(sound_file)
 
-length = sr * seg_len           # 5s segment
+length = sr * seg_len
 range_high = len(wav_data) - length
-seed(1)  # for consistency and replication
+seed(1)
 random_start = randint(0, range_high, size=seg_num)
 
 cur_wav = wav_data[random_start[0]:random_start[0] + length]
@@ -39,10 +39,8 @@ plt.ylabel('Segments')
 plt.title('2D Visualization of wav_data')
 plt.show()
 
-# Select the first element of cur_spectro to get a 2D array
 spectro_2d = cur_spectro[0]
 
-# Plot the spectrogram
 plt.figure(figsize=(10, 4))
 plt.imshow(spectro_2d, aspect='auto', cmap='viridis', origin='lower')
 plt.colorbar(label='Intensity (dB)')

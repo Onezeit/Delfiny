@@ -1,52 +1,47 @@
 import torch
-from Model import AudioClassifier
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch.utils.data import DataLoader
 from data_loader import SoundDS
+from Model import AudioClassifier
 
-myds = SoundDS('Samples/Orka')
-
-# Random split of 80:20 between training and validation
-num_items = len(myds)
-num_train = round(num_items * 0.8)
-num_val = num_items - num_train
-train_ds, val_ds = random_split(myds, [num_train, num_val])
-
-train_dl = torch.utils.data.DataLoader(train_ds, batch_size=8, shuffle=True)
-val_dl = torch.utils.data.DataLoader(val_ds, batch_size=8, shuffle=False)
+model_path = 'audio_classifier_weights.pth'
+test_data_path = ['Samples/Orka_test']
+data = SoundDS(test_data_path)
+valid_dl = DataLoader(data, batch_size=1, shuffle=False)
 
 
-def inference(model, val_dl):
-    correct_prediction = 0
-    total_prediction = 0
+def load_model(model_path):
+    model = AudioClassifier()
+    model.load_state_dict(torch.load(model_path))
+    model.eval()
+    return model
 
-    # Disable gradient updates
+
+def predict_with_confidence_threshold(outputs, threshold=0.7):
+    probabilities = torch.softmax(outputs, dim=1)
+    max_probs, predictions = torch.max(probabilities, dim=1)
+    uncertain = max_probs < threshold
+    predictions[uncertain] = 2
+    return predictions, max_probs
+
+
+def test_model(model, input_data):
+    correct = 0
+    total = 0
     with torch.no_grad():
-        for data in val_dl:
-            # Get the input features and target labels, and put them on the GPU
-            inputs, labels = data[0].to(device), data[1].to(device)
-
-            # Normalize the inputs
-            inputs_m, inputs_s = inputs.mean(), inputs.std()
-            inputs = (inputs - inputs_m) / inputs_s
-
-            # Get predictions
+        for i, data in enumerate(input_data):
+            inputs, labels, filenames = data
+            if inputs.nelement() == 0:
+                continue
             outputs = model(inputs)
+            predicted, prob = predict_with_confidence_threshold(outputs)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+            label = labels.item()
+            predicted_label = predicted.item()
+            print(f"File: {filenames[0]}, True label: {label}, Predicted label: {predicted_label}, Probability: {prob.item():.4f}")
+    accuracy = 100 * correct / total
+    print(f'Accuracy: {accuracy:.2f}%')
 
-            # Get the predicted class with the highest score
-            _, prediction = torch.max(outputs, 1)
-            # Count of predictions that matched the target label
-            correct_prediction += (prediction == labels).sum().item()
-            total_prediction += prediction.shape[0]
 
-    acc = correct_prediction / total_prediction
-    print(f'Accuracy: {acc:.2f}, Total items: {total_prediction}')
-
-# Create the model and put it on the GPU if available
-myModel = AudioClassifier()
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-myModel = myModel.to(device)
-# Check that it is on Cuda
-next(myModel.parameters()).device
-
-# Run inference on trained model with the validation set
-inference(myModel, val_dl)
+model = load_model(model_path)
+test_model(model, valid_dl)
