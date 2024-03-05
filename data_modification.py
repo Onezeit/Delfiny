@@ -8,7 +8,7 @@ seg_len = 5
 seg_num = 60
 target_shape = (960, 64)
 
-sound_file = 'LiveSamples/output.wav'
+sound_file = 'oboj_piano.wav'
 sr, wav_data = wavfile.read(sound_file)
 
 length = sr * seg_len
