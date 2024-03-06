@@ -1,0 +1,139 @@
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79022001.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79022001');">Metadata</a></td>
+                    </tr>
+                
+
+                    <tr valign="top">
+                        <td><audio controls>
+		            <source src="/science/B/whalesounds/WhaleSounds/79022002.wav" type="audio/wav">
+		            </audio>
+	                </td>
+                        <td><i>Megaptera novaeangliae  </i></td>
+                        <td>Three to four miles N. of Crafton Is., Prince William Sound, Alaska  </td>
+                        <td>5-Aug-1979   </td>
+
+
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79022002.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79022002');">Metadata</a></td>
+                    </tr>
+                
+
+                    <tr valign="top">
+                        <td><audio controls>
+		            <source src="/science/B/whalesounds/WhaleSounds/79022003.wav" type="audio/wav">
+		            </audio>
+	                </td>
+                        <td><i>Megaptera novaeangliae  </i></td>
+                        <td>Three to four miles N. of Crafton Is., Prince William Sound, Alaska  </td>
+                        <td>5-Aug-1979   </td>
+
+
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79022003.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79022003');">Metadata</a></td>
+                    </tr>
+                
+
+                    <tr valign="top">
+                        <td><audio controls>
+		            <source src="/science/B/whalesounds/WhaleSounds/79022004.wav" type="audio/wav">
+		            </audio>
+	                </td>
+                        <td><i>Megaptera novaeangliae  </i></td>
+                        <td>Three to four miles N. of Crafton Is., Prince William Sound, Alaska  </td>
+                        <td>5-Aug-1979   </td>
+
+
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79022004.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79022004');">Metadata</a></td>
+                    </tr>
+                
+
+                    <tr valign="top">
+                        <td><audio controls>
+		            <source src="/science/B/whalesounds/WhaleSounds/79022005.wav" type="audio/wav">
+		            </audio>
+	                </td>
+                        <td><i>Megaptera novaeangliae  </i></td>
+                        <td>Three to four miles N. of Crafton Is., Prince William Sound, Alaska  </td>
+                        <td>5-Aug-1979   </td>
+
+
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79022005.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79022005');">Metadata</a></td>
+                    </tr>
+                
+
+                    <tr valign="top">
+                        <td><audio controls>
+		            <source src="/science/B/whalesounds/WhaleSounds/79022006.wav" type="audio/wav">
+		            </audio>
+	                </td>
+                        <td><i>Megaptera novaeangliae  </i></td>
+                        <td>Three to four miles N. of Crafton Is., Prince William Sound, Alaska  </td>
+                        <td>5-Aug-1979   </td>
+
+
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79022006.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79022006');">Metadata</a></td>
+                    </tr>
+                
+
+                    <tr valign="top">
+                        <td><audio controls>
+		            <source src="/science/B/whalesounds/WhaleSounds/79029002.wav" type="audio/wav">
+		            </audio>
+	                </td>
+                        <td><i>Megaptera novaeangliae  </i></td>
+                        <td>N of Shelter Point, Knight Island Passage, Alaska  </td>
+                        <td>12-Aug-1979   </td>
+
+
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79029002.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79029002');">Metadata</a></td>
+                    </tr>
+                
+
+                    <tr valign="top">
+                        <td><audio controls>
+		            <source src="/science/B/whalesounds/WhaleSounds/79029003.wav" type="audio/wav">
+		            </audio>
+	                </td>
+                        <td><i>Megaptera novaeangliae  </i></td>
+                        <td>N of Shelter Point, Knight Island Passage, Alaska  </td>
+                        <td>12-Aug-1979   </td>
+
+
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79029003.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79029003');">Metadata</a></td>
+                    </tr>
+                
+
+                    <tr valign="top">
+                        <td><audio controls>
+		            <source src="/science/B/whalesounds/WhaleSounds/79029004.wav" type="audio/wav">
+		            </audio>
+	                </td>
+                        <td><i>Megaptera novaeangliae  </i></td>
+                        <td>N of Shelter Point, Knight Island Passage, Alaska  </td>
+                        <td>12-Aug-1979   </td>
+
+
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79029004.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79029004');">Metadata</a></td>
+                    </tr>
+                
+
+                    <tr valign="top">
+                        <td><audio controls>
+		            <source src="/science/B/whalesounds/WhaleSounds/79029005.wav" type="audio/wav">
+		            </audio>
+	                </td>
+                        <td><i>Megaptera novaeangliae  </i></td>
+                        <td>N of Shelter Point, Knight Island Passage, Alaska  </td>
+                        <td>12-Aug-1979   </td>
+
+
+			<td><a target="_blank" href="/science/B/whalesounds/WhaleSounds/79029005.wav">Download</a></td>
+			<td><a href="javascript:popUpWin('metaData.cfm?RN=79029005');">Metadata</a></td>
+                    </tr>
+              
