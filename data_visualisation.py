@@ -1,24 +1,23 @@
 from scipy.io import wavfile
 from preprocess_sound import preprocess_sound
-from numpy.random import seed, randint
 import matplotlib.pyplot as plt
 import os
+import numpy as np
+import torch
 
-seg_len = 5
-seg_num = 60
 target_shape = (960, 64)
 
-sound_file = 'oboj_piano.wav'
+sound_file = 'Samples/Orka_test/humbak28.wav'
+
 sr, wav_data = wavfile.read(sound_file)
-
-length = sr * seg_len
-range_high = len(wav_data) - length
-seed(1)
-random_start = randint(0, range_high, size=seg_num)
-
-cur_wav = wav_data[random_start[0]:random_start[0] + length]
 wav_data = wav_data / 32768.0
 cur_spectro = preprocess_sound(wav_data, sr)
+cur_spectro_padded = np.zeros(target_shape)
+
+if cur_spectro.shape[0] > 0:
+    min_time_frames = min(target_shape[0], cur_spectro.shape[1])
+    min_mel_bands = min(target_shape[1], cur_spectro.shape[2])
+    cur_spectro_padded[:min_time_frames, :min_mel_bands] = cur_spectro[0][:min_time_frames, :min_mel_bands]
 
 num_rows = 1000
 num_columns = len(wav_data) // num_rows
@@ -26,21 +25,19 @@ reshaped_wav_data = wav_data[:num_rows * num_columns].reshape(num_rows, num_colu
 
 class_id = os.path.basename(os.path.dirname(sound_file))
 
+spectr_2d = cur_spectro[0]
 
-print("Kształt macierzy oryginalnego dźwięku:", wav_data.shape)
-print("Kształt macierzy spektogramy MEL:", cur_spectro.shape)
-
-# Plot reshaped wav_data
 plt.figure(figsize=(10, 4))
-plt.imshow(reshaped_wav_data, aspect='auto', cmap='viridis', origin='lower')
+plt.imshow(spectr_2d, aspect='auto', cmap='viridis', origin='lower')
 plt.colorbar(label='Amplitude')
 plt.xlabel('Samples')
 plt.ylabel('Segments')
 plt.title('2D Visualization of wav_data')
 plt.show()
 
-spectro_2d = cur_spectro[0]
-
+spectro_2d = cur_spectro_padded
+spectro_4d = np.expand_dims(cur_spectro, axis=0)
+print(spectro_4d.shape)
 plt.figure(figsize=(10, 4))
 plt.imshow(spectro_2d, aspect='auto', cmap='viridis', origin='lower')
 plt.colorbar(label='Intensity (dB)')
@@ -49,7 +46,6 @@ plt.ylabel('Frequency Bins')
 plt.title('Spectrogram Visualization')
 plt.show()
 
-print("Macierz oryginalnego dzwieku:")
-print(wav_data)
-print("Macierz spektogramu MEL:")
-print(cur_spectro)
+
+print("Kształt macierzy spektogramy MEL:", spectr_2d.shape)
+print("Kształt macierzy obciętego spektogramy MEL:", spectro_2d.shape)

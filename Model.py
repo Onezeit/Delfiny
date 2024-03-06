@@ -8,7 +8,7 @@ class AudioClassifier(nn.Module):
         super().__init__()
         conv_layers = []
 
-        self.conv1 = nn.Conv2d(960, 8, kernel_size=(5, 5), stride=(2, 2), padding=(2, 2))
+        self.conv1 = nn.Conv2d(1, 8, kernel_size=(5, 5), stride=(2, 2), padding=(2, 2))
         self.relu1 = nn.ReLU()
         # Wartosci
         self.bn1 = nn.BatchNorm2d(8)
@@ -39,19 +39,13 @@ class AudioClassifier(nn.Module):
         conv_layers += [self.conv4, self.relu4, self.bn4]
 
         self.ap = nn.AdaptiveAvgPool2d(output_size=(1, 1))
-        self.fc1 = nn.Linear(64, 128)
-        self.fc2 = nn.Linear(128, 64)
-        self.fc3 = nn.Linear(64, 32)
-        self.fc4 = nn.Linear(32, 2)
+        self.fc1 = nn.Linear(64, 2)
         self.conv = nn.Sequential(*conv_layers)
 
     def forward(self, x):
         x = self.conv(x)
         x = self.ap(x)
         x = x.view(x.size(0), -1)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = F.relu(self.fc3(x))
-        x = self.fc4(x)
+        x = self.fc1(x)
 
         return x

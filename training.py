@@ -22,7 +22,36 @@ myModel = myModel.to(device)
 next(myModel.parameters()).device
 
 
-def training(model, train_dl, num_epochs):
+def validate(model, dataloader):
+    model.eval()
+    running_loss = 0.0
+    correct_prediction = 0
+    total_prediction = 0
+    criterion = nn.CrossEntropyLoss()
+
+    with torch.no_grad():
+        for data in dataloader:
+            inputs, labels = data[0].float().to(device), data[1].to(device)
+
+            inputs_m, inputs_s = inputs.mean(), inputs.std()
+            if inputs_s > 0:
+                inputs = (inputs - inputs_m) / inputs_s
+
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+
+            running_loss += loss.item()
+            _, prediction = torch.max(outputs, 1)
+            correct_prediction += (prediction == labels).sum().item()
+            total_prediction += labels.size(0)
+
+    avg_loss = running_loss / len(dataloader)
+    accuracy = correct_prediction / total_prediction
+    print(f'Validation Loss: {avg_loss:.2f}, Validation Accuracy: {accuracy:.2f}')
+    model.train()
+
+
+def training(model, train_dl, val_dl, num_epochs):
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
     scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.001,
@@ -58,12 +87,13 @@ def training(model, train_dl, num_epochs):
         num_batches = len(train_dl)
         avg_loss = running_loss / num_batches
         acc = correct_prediction / total_prediction
-        print(f"Correct: {correct_prediction}")
-        print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {acc:.2f}')
+        print(f'Epoch: {epoch}, Training Loss: {avg_loss:.2f}, Training Accuracy: {acc:.2f}')
+
+        validate(model, val_dl)
 
     print('Finished Training')
 
 
 num_epochs = 25
-training(myModel, train_dl, num_epochs)
+training(myModel, train_dl, val_dl, num_epochs)
 torch.save(myModel.state_dict(), 'audio_classifier_weights.pth')
