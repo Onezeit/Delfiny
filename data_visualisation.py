@@ -7,7 +7,7 @@ import torch
 
 target_shape = (960, 64)
 
-sound_file = 'Samples/Orka_test/humbak28.wav'
+sound_file = 'Humbak28.wav'
 
 sr, wav_data = wavfile.read(sound_file)
 wav_data = wav_data / 32768.0

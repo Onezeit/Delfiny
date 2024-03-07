@@ -89,11 +89,11 @@ def training(model, train_dl, val_dl, num_epochs):
         acc = correct_prediction / total_prediction
         print(f'Epoch: {epoch}, Training Loss: {avg_loss:.2f}, Training Accuracy: {acc:.2f}')
 
-        validate(model, val_dl)
+        #validate(model, val_dl)
 
     print('Finished Training')
 
 
-num_epochs = 25
+num_epochs = 50
 training(myModel, train_dl, val_dl, num_epochs)
 torch.save(myModel.state_dict(), 'audio_classifier_weights.pth')
