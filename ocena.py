@@ -3,8 +3,8 @@ from torch.utils.data import DataLoader
 from data_loader import SoundDS
 from Model import AudioClassifier
 
-model_path = 'audio_classifier_weights.pth'
-test_data_path = ['Samples/Humbak_test']
+model_path = 'GPTs/GPT3.pth'
+test_data_path = ['Samples/Orka_test']
 data = SoundDS(test_data_path)
 valid_dl = DataLoader(data, batch_size=1, shuffle=False)
 
@@ -16,7 +16,7 @@ def load_model(model_path):
     return model
 
 
-def predict_with_confidence_threshold(outputs, threshold=0.6):
+def predict_with_confidence_threshold(outputs, threshold=0.7):
     probabilities = torch.softmax(outputs, dim=1)
     max_probs, predictions = torch.max(probabilities, dim=1)
     uncertain = max_probs < threshold

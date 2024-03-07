@@ -87,13 +87,13 @@ def training(model, train_dl, val_dl, num_epochs):
         num_batches = len(train_dl)
         avg_loss = running_loss / num_batches
         acc = correct_prediction / total_prediction
-        print(f'Epoch: {epoch}, Training Loss: {avg_loss:.2f}, Training Accuracy: {acc:.2f}')
+        print(f'Epoch: {epoch}, Running Loss: {running_loss}, Training Loss: {avg_loss:.2f}, Training Accuracy: {acc:.2f}')
 
         #validate(model, val_dl)
 
     print('Finished Training')
 
 
-num_epochs = 50
+num_epochs = 5
 training(myModel, train_dl, val_dl, num_epochs)
-torch.save(myModel.state_dict(), 'audio_classifier_weights.pth')
+torch.save(myModel.state_dict(), 'GPTs/GPT3.pth')
