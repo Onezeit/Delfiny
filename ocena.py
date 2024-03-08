@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 from data_loader import SoundDS
 from Model import AudioClassifier
 
-model_path = 'GPTs/GPT3.pth'
+model_path = 'GPTs/GPT4.pth'
 test_data_path = ['Samples/Orka_test']
 data = SoundDS(test_data_path)
 valid_dl = DataLoader(data, batch_size=1, shuffle=False)

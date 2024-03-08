@@ -5,7 +5,7 @@ from data_loader import SoundDS
 from torch.utils.data import DataLoader, Dataset, random_split
 
 
-data_paths = ['Samples/Orka', 'Samples/Humbak']
+data_paths = ['Samples/Train_Orka', 'Samples/Train_Humbak']
 myds = SoundDS(data_paths)
 
 num_items = len(myds)
@@ -94,6 +94,6 @@ def training(model, train_dl, val_dl, num_epochs):
     print('Finished Training')
 
 
-num_epochs = 5
+num_epochs = 1
 training(myModel, train_dl, val_dl, num_epochs)
-torch.save(myModel.state_dict(), 'GPTs/GPT3.pth')
+torch.save(myModel.state_dict(), 'GPTs/GPT4.pth')

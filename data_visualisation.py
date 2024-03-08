@@ -5,11 +5,12 @@ import os
 import numpy as np
 import torch
 
-target_shape = (960, 64)
+target_shape = (600, 64)
 
-sound_file = 'Samples/Orka_test/6412400I.wav'
+sound_file = 'Samples/Train_Humbak/Humbak6301900B.wav'
 
 sr, wav_data = wavfile.read(sound_file)
+print(sr)
 wav_data = wav_data / 32768.0
 cur_spectro = preprocess_sound(wav_data, sr)
 
