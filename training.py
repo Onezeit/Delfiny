@@ -4,6 +4,7 @@ import torch.nn as nn
 from data_loader import SoundDS
 from torch.utils.data import DataLoader, Dataset, random_split
 import pandas as pd
+import os
 
 
 data_paths = ['Samples/Train_Orka', 'Samples/Train_Humbak']
@@ -96,19 +97,31 @@ def training(model, train_dl, val_dl, num_epochs):
 
 
 def pth_to_csv(pth_file, csv_file):
-    state_dict = torch.load(pth_file)
+    state_dict = torch.load(pth_file, map_location=torch.device('cpu'))
 
     for key, value in state_dict.items():
         tensor_as_list = value.numpy().flatten().tolist()
 
         df = pd.DataFrame(tensor_as_list)
-
         df.to_csv(f"{csv_file}_{key}.csv", index=False)
 
 
-num_epochs = 1
+def save_model(model, path, model_name, num_epochs):
+    directory = os.path.join(path, f"{num_epochs}_epoch", model_name)
+
+    if not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+
+    torch.save(model.state_dict(), os.path.join(directory, f"{model_name}.pth"))
+
+
+num_epochs = 2
 training(myModel, train_dl, val_dl, num_epochs)
-torch.save(myModel.state_dict(), 'Modele/1_epoch/GPT-1.pth')
-pth_file = 'Modele/1_epoch/GPT-1.pth'
-csv_file = "Modele/1_epoch/weights"
+
+model_name = "GPT"
+model_path = "Modele"
+save_model(myModel, model_path, model_name, num_epochs)
+
+pth_file = os.path.join(model_path, f"{num_epochs}_epoch", model_name, f"{model_name}.pth")
+csv_file = os.path.join(model_path, f"{num_epochs}_epoch", model_name, "weights")
 pth_to_csv(pth_file, csv_file)

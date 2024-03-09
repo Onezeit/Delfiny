@@ -34,10 +34,14 @@ class SoundDS(Dataset):
         wav_data = wav_data / 32768.0
         cur_spectro = preprocess_sound(wav_data, sr)
         cur_spectro_padded = np.zeros(self.target_shape)
-        if cur_spectro.shape[0] > 0:
-            min_time_frames = min(self.target_shape[0], cur_spectro.shape[1])
-            min_mel_bands = min(self.target_shape[1], cur_spectro.shape[2])
-            cur_spectro_padded[:min_time_frames, :min_mel_bands] = cur_spectro[0][:min_time_frames, :min_mel_bands]
+
+        max_val_index = np.unravel_index(np.argmax(cur_spectro), cur_spectro.shape)
+
+        time_offset = max(0, min(max_val_index[1] - self.target_shape[0] // 2, cur_spectro.shape[1] - self.target_shape[0]))
+        mel_offset = max(0, min(max_val_index[2] - self.target_shape[1] // 2, cur_spectro.shape[2] - self.target_shape[1]))
+
+        cur_spectro_padded = cur_spectro[0, time_offset:time_offset + self.target_shape[0],
+                             mel_offset:mel_offset + self.target_shape[1]]
 
         cur_spectro_padded = np.expand_dims(cur_spectro_padded, axis=0)
         return torch.tensor(cur_spectro_padded, dtype=torch.float32), torch.tensor(class_idx, dtype=torch.long), filename
