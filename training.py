@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 from data_loader import SoundDS
 from torch.utils.data import DataLoader, Dataset, random_split
+import pandas as pd
 
 
 data_paths = ['Samples/Train_Orka', 'Samples/Train_Humbak']
@@ -89,11 +90,25 @@ def training(model, train_dl, val_dl, num_epochs):
         acc = correct_prediction / total_prediction
         print(f'Epoch: {epoch}, Running Loss: {running_loss}, Training Loss: {avg_loss:.2f}, Training Accuracy: {acc:.2f}')
 
-        #validate(model, val_dl)
+        validate(model, val_dl)
 
     print('Finished Training')
 
 
+def pth_to_csv(pth_file, csv_file):
+    state_dict = torch.load(pth_file)
+
+    for key, value in state_dict.items():
+        tensor_as_list = value.numpy().flatten().tolist()
+
+        df = pd.DataFrame(tensor_as_list)
+
+        df.to_csv(f"{csv_file}_{key}.csv", index=False)
+
+
 num_epochs = 1
 training(myModel, train_dl, val_dl, num_epochs)
-torch.save(myModel.state_dict(), 'GPTs/GPT4.pth')
+torch.save(myModel.state_dict(), 'Modele/1_epoch/GPT-1.pth')
+pth_file = 'Modele/1_epoch/GPT-1.pth'
+csv_file = "Modele/1_epoch/weights"
+pth_to_csv(pth_file, csv_file)

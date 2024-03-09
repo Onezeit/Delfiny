@@ -8,7 +8,7 @@ import torch
 
 
 class SoundDS(Dataset):
-    def __init__(self, data_paths, target_shape=(960, 64)):
+    def __init__(self, data_paths, target_shape=(600, 64)):
         self.files = []
         self.target_shape = target_shape
 

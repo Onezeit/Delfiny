@@ -3,10 +3,10 @@ import os
 import shutil
 
 
-def move_files_longer_than_n_seconds(source_folder, target_folder, n):
+def files_longer_than_n_seconds(source_folder, target_folder, n):
     total_files = 0
-    files_longer_than_n_seconds = 0
-    files_moved = []
+    number_files = 0
+    files = []
 
     for filename in os.listdir(source_folder):
         if filename.endswith('.wav'):
@@ -15,29 +15,54 @@ def move_files_longer_than_n_seconds(source_folder, target_folder, n):
                 sr, data = wavfile.read(file_path)
                 duration = len(data) / sr
                 if duration > n:
-                    files_longer_than_n_seconds += 1
-                    shutil.move(file_path, os.path.join(target_folder, filename))
-                    files_moved.append(filename)
+                    number_files += 1
+                    files.append(filename)
             except Exception as e:
                 print(f"Problem z plikiem {filename}: {e}")
             total_files += 1
 
-    print(f"Wszystkich plików: {total_files}")
-    print(f"Pliki dłuższe niż {n} sekund: {files_longer_than_n_seconds}")
-    if files_moved:
-        print("Pliki usunięte:")
-        for file in files_moved:
+    if files:
+        print("Pliki dłuższe niż podana liczba sekund:")
+        for file in files:
             print(file)
+        print(f"Wszystkich plików: {total_files}")
+        print(f"Pliki dłuższe niż {n} sekund: {number_files}")
+        move_files = input("Czy chcesz przenieść te pliki? (tak/nie) ")
+        if move_files.lower() == 'tak':
+            move_files_longer_than_n_seconds(source_folder, target_folder, n, files)
+    else:
+        print(f"Żadne pliki nie są dłuższe niż {n} sekund.")
+
+
+def move_files_longer_than_n_seconds(source_folder, target_folder, n, files_to_move):
+    files_moved = 0
+
+    for filename in files_to_move:
+        file_path = os.path.join(source_folder, filename)
+        try:
+            shutil.move(file_path, os.path.join(target_folder, filename))
+            print(f"Przeniesiono: {filename}")
+            files_moved += 1
+        except Exception as e:
+            print(f"Problem z przeniesieniem pliku {filename}: {e}")
+
+    if files_moved > 0:
+        print(f"Przeniesiono plików: {files_moved}")
     else:
         print("Żadne pliki nie zostały przemieszczone.")
 
 
-source_folder = 'Samples/Humbak_test'
-target_folder = 'Samples/Train_Orka'
-n = 3
+source_folder = 'Samples/Train_Orka'
+target_folder = 'Samples/Train_Humbak'
 
-move_files_longer_than_n_seconds(source_folder, target_folder, n)
+if source_folder:
+    n = int(input("Podaj minimalny czas trwania plików audio: "))
+    user_input = int(input(f"1 - Zobacz ile jest plików powyżej {n} sekund \n"
+                           f"2 - Przerzuć pliki, które mają powyżej {n} sekund \n"))
 
-user_input = input(f"Czy chcesz przerzucić pliki dłuższe niż {n} sekund do folderu {target_folder} (tak/nie): ")
-if user_input.lower() == "tak":
-    move_files_longer_than_n_seconds(source_folder, target_folder, n)
+if user_input == 1:
+    files_longer_than_n_seconds(source_folder, target_folder, n)
+elif user_input == 2:
+    move_files_longer_than_n_seconds(source_folder, target_folder, n, os.listdir(source_folder))
+else:
+    print("Podano złą cyfrę")

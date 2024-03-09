@@ -3,14 +3,12 @@ from preprocess_sound import preprocess_sound
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-import torch
 
 target_shape = (600, 64)
 
-sound_file = 'Samples/Train_Humbak/Humbak6301900B.wav'
+sound_file = 'Samples/Train_Humbak/Humbak6301901T.wav'
 
 sr, wav_data = wavfile.read(sound_file)
-print(sr)
 wav_data = wav_data / 32768.0
 cur_spectro = preprocess_sound(wav_data, sr)
 
@@ -18,9 +16,10 @@ print(f"Cur_spectro: {cur_spectro.shape}")
 cur_spectro_padded = np.zeros(target_shape)
 print(f"cur_spectro_padded: {cur_spectro_padded.shape}")
 
-min_time_frames = min(target_shape[0], cur_spectro.shape[1])
-min_mel_bands = min(target_shape[1], cur_spectro.shape[2])
-cur_spectro_padded[:min_time_frames, :min_mel_bands] = cur_spectro[0][:min_time_frames, :min_mel_bands]
+if cur_spectro.shape[0] > 0:
+    min_time_frames = min(target_shape[0], cur_spectro.shape[1])
+    min_mel_bands = min(target_shape[1], cur_spectro.shape[2])
+    cur_spectro_padded[:min_time_frames, :min_mel_bands] = cur_spectro[0][:min_time_frames, :min_mel_bands]
 
 num_rows = 1000
 num_columns = len(wav_data) // num_rows
