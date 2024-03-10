@@ -1,11 +1,26 @@
+import tkinter as tk
 import pyaudio
 import requests
 from bs4 import BeautifulSoup
 import wave
-import sys
+from data_visualisation import spektogram
 
+def map_choice_to_key(option):
+    mapping = {
+        "Orcasound Lab": "orcasound-lab",
+        "North San Juan Channel": "north-sjc",
+        "Port Townsend": "port-townsend",
+        "Bush Point": "bush-point",
+        "Beach Camp at Sunset Bay": "sunset-bay",
+        "Point Robinson": "point-robinson",
+    }
 
-def record_audio(output_filename, duration=25, channels=1, sample_rate=44100):
+    # Get the selected option text
+    selected_option_text = option.split(" - ")[1]
+
+    return mapping.get(selected_option_text)
+
+def record_audio(output_filename, duration=10, channels=1, sample_rate=44100):
     p = pyaudio.PyAudio()
 
     # Ustawienia nagrywania
@@ -41,6 +56,8 @@ def record_audio(output_filename, duration=25, channels=1, sample_rate=44100):
 
     print(f"Nagranie zapisane jako {output_filename}")
 
+    # Po nagraniu uruchom funkcję spektogram z nagranym dźwiękiem
+    spektogram(output_filename)
 
 def get_website_content(url):
     response = requests.get(url)
@@ -50,40 +67,77 @@ def get_website_content(url):
         print(f"Błąd podczas pobierania strony. Kod statusu: {response.status_code}")
         return None
 
+def map_choice_to_key(option):
+    mapping = {
+        "Orcasound Lab": "orcasound-lab",
+        "North San Juan Channel": "north-sjc",
+        "Port Townsend": "port-townsend",
+        "Bush Point": "bush-point",
+        "Beach Camp at Sunset Bay": "sunset-bay",
+        "Point Robinson": "point-robinson",
+    }
 
-def main():
+    # Get the selected option text
+    selected_option_text = option.split(" - ")[1]
+
+    return mapping.get(selected_option_text)
+
+def select_option(option, selected_option_label, recording_info_text):
+    selected_option_label.config(text=f"Wybrano opcję: {option}")
+
+    # Pobierz klucz na podstawie opcji
+    key = map_choice_to_key(option)
+
+    # Wywołaj funkcję z odpowiednimi argumentami
     url = "https://live.orcasound.net/listen/"
-    print("1 - Orcasound Lab \n"
-          "2 - North San Juan Channel \n"
-          "3 - Port Townsend \n"
-          "4 - Bush Point \n"
-          "5 - Beach Camp at Sunset Bay \n"
-          "6 - Point Robinson \n")
-    choice = int(input("Choose station you want to probe sound from \n"))
-    if choice == 1:
-        key = "orcasound-lab"
-    elif choice == 2:
-        key = "north-sjc"
-    elif choice == 3:
-        key = "port-townsend"
-    elif choice == 4:
-        key = "bush-point"
-    elif choice == 5:
-        key = "sunset-bay"
-    elif choice == 6:
-        key = "point-robinson"
-    else:
-        print("Invalid number")
-
     website_url = url + key
-    print(website_url)
+    get_website_content(website_url)  # Zakładam, że ta funkcja zdefiniowana jest w live_listening
 
-    output_filename = "LiveSamples/output.wav"
-    website_content = get_website_content(website_url)
+    # Dodaj kod rozpoczynający nagrywanie
+    output_filename = "output.wav"
+    record_audio(output_filename)
 
-    if website_content:
-        record_audio(output_filename)
+    # Aktualizuj pole tekstowe z informacjami dotyczącymi nagrywania
+    recording_info_text.config(state=tk.NORMAL)
+    recording_info_text.insert(tk.END, f"\nNagrywanie zakończone. Plik zapisany jako {output_filename}\n")
+    recording_info_text.config(state=tk.DISABLED)
 
+def start_recording(recording_label):
+    # Tutaj umieść kod do rozpoczęcia nagrywania, na przykład wywołanie funkcji do nagrywania dźwięku.
+
+    # Po zakończeniu nagrywania, możesz zaktualizować etykietę tekstu lub wyświetlić nowe okno z informacją.
+    recording_label.config(text="Nagrywanie...")
+
+def create_gui():
+    root = tk.Tk()
+    root.title("Nagrywacz")
+    root.geometry("800x500")  # Proporcje 16:9
+
+    # Etykieta informacyjna
+    info_label = tk.Label(root, text="Wybierz jedną z poniższych stacji nasłuchujących:")
+    info_label.pack(pady=10)
+
+    # Lista opcji
+    options = ["1 - Orcasound Lab", "2 - North San Juan Channel", "3 - Port Townsend", "4 - Bush Point", "5 - Beach Camp at Sunset Bay", "6 - Point Robinson"]
+
+    # Tworzenie przycisków dla każdej opcji o równych rozmiarach
+    option_buttons = []
+    for option in options:
+        button = tk.Button(root, text=option, command=lambda opt=option: select_option(opt, selected_option_label, recording_info_text), width=20, height=2)
+        button.pack(pady=5)
+        option_buttons.append(button)
+
+    # Pole tekstowe z informacjami dotyczącymi nagrywania
+    recording_info_text = tk.Text(root, height=10, width=60)
+    recording_info_text.pack(pady=10)
+    recording_info_text.insert(tk.END, "Informacje dotyczące nagrywania: \n")
+    recording_info_text.config(state=tk.DISABLED)
+
+    # Etykieta do wyświetlania wybranej opcji
+    selected_option_label = tk.Label(root, text="")
+    selected_option_label.pack()
+
+    root.mainloop()
 
 if __name__ == "__main__":
-    main()
+    create_gui()
