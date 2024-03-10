@@ -7,7 +7,7 @@ from preprocess_sound import preprocess_sound
 
 target_shape = (600, 64)
 
-sound_file = 'Samples/Train_Humbak/Humbak63019010.wav'
+sound_file = 'Samples/Humbak/Humbak8002000N.wav'
 
 sr, wav_data = wavfile.read(sound_file)
 wav_data = wav_data / 32768.0

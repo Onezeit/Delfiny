@@ -52,11 +52,11 @@ def move_files_longer_than_n_seconds(source_folder, target_folder, n, files_to_m
         print("Żadne pliki nie zostały przemieszczone.")
 
 
-source_folder = 'Samples/Train_Humbak'
-target_folder = 'Samples/Humbak_Long'
+source_folder = 'Samples/Orka'
+target_folder = 'Samples/Train_Orka'
 
 if source_folder:
-    n = int(input("Podaj minimalny czas trwania plików audio: "))
+    n = float(input("Podaj minimalny czas trwania plików audio: "))
     user_input = int(input(f"1 - Zobacz ile jest plików powyżej {n} sekund \n"
                            f"2 - Przerzuć pliki, które mają powyżej {n} sekund \n"))
 

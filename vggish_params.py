@@ -29,11 +29,10 @@ STFT_HOP_LENGTH_SECONDS = 0.005
 NUM_MEL_BINS = NUM_BANDS
 MEL_MIN_HZ = 1
 MEL_MAX_HZ = 11500
-LOG_OFFSET = 0.1  # Offset used for stabilized log of input mel-spectrogram.
-EXAMPLE_WINDOW_SECONDS = 3  # Each example contains 96 10ms frames
-EXAMPLE_HOP_SECONDS = 4.96    # with zero overlap.
+LOG_OFFSET = 0.1
+EXAMPLE_WINDOW_SECONDS = 3
+EXAMPLE_HOP_SECONDS = 4.96
 
-# Parameters used for embedding postprocessing.
 PCA_EIGEN_VECTORS_NAME = 'pca_eigen_vectors'
 PCA_MEANS_NAME = 'pca_means'
 QUANTIZE_MIN_VAL = -2.0

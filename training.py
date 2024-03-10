@@ -115,7 +115,7 @@ def save_model(model, path, model_name, num_epochs):
     torch.save(model.state_dict(), os.path.join(directory, f"{model_name}.pth"))
 
 
-num_epochs = 2
+num_epochs = 4
 training(myModel, train_dl, val_dl, num_epochs)
 
 model_name = "GPT"
