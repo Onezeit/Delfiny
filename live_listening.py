@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import wave
 from data_visualisation import spektogram
 
+
 def map_choice_to_key(option):
     mapping = {
         "Orcasound Lab": "orcasound-lab",
@@ -19,6 +20,7 @@ def map_choice_to_key(option):
     selected_option_text = option.split(" - ")[1]
 
     return mapping.get(selected_option_text)
+
 
 def record_audio(output_filename, duration=10, channels=1, sample_rate=44100):
     p = pyaudio.PyAudio()
@@ -59,6 +61,7 @@ def record_audio(output_filename, duration=10, channels=1, sample_rate=44100):
     # Po nagraniu uruchom funkcję spektogram z nagranym dźwiękiem
     spektogram(output_filename)
 
+
 def get_website_content(url):
     response = requests.get(url)
     if response.status_code == 200:
@@ -66,6 +69,7 @@ def get_website_content(url):
     else:
         print(f"Błąd podczas pobierania strony. Kod statusu: {response.status_code}")
         return None
+
 
 def map_choice_to_key(option):
     mapping = {
@@ -81,6 +85,7 @@ def map_choice_to_key(option):
     selected_option_text = option.split(" - ")[1]
 
     return mapping.get(selected_option_text)
+
 
 def select_option(option, selected_option_label, recording_info_text):
     selected_option_label.config(text=f"Wybrano opcję: {option}")
@@ -102,11 +107,13 @@ def select_option(option, selected_option_label, recording_info_text):
     recording_info_text.insert(tk.END, f"\nNagrywanie zakończone. Plik zapisany jako {output_filename}\n")
     recording_info_text.config(state=tk.DISABLED)
 
+
 def start_recording(recording_label):
     # Tutaj umieść kod do rozpoczęcia nagrywania, na przykład wywołanie funkcji do nagrywania dźwięku.
 
     # Po zakończeniu nagrywania, możesz zaktualizować etykietę tekstu lub wyświetlić nowe okno z informacją.
     recording_label.config(text="Nagrywanie...")
+
 
 def create_gui():
     root = tk.Tk()
@@ -138,6 +145,7 @@ def create_gui():
     selected_option_label.pack()
 
     root.mainloop()
+
 
 if __name__ == "__main__":
     create_gui()

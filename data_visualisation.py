@@ -3,10 +3,12 @@ from preprocess_sound import preprocess_sound
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-def spektogram(sound_file = 'Samples/Orka/Orka16.wav'):
-    target_shape = (600, 64)
 
-    sound_file = 'Samples/Orka/Orka16.wav'
+
+def spektogram():
+    target_shape = (1800, 64)
+
+    sound_file = 'output.wav'
 
     sr, wav_data = wavfile.read(sound_file)
     wav_data = wav_data / 32768.0
@@ -21,8 +23,6 @@ def spektogram(sound_file = 'Samples/Orka/Orka16.wav'):
     num_rows = 1000
     num_columns = len(wav_data) // num_rows
     reshaped_wav_data = wav_data[:num_rows * num_columns].reshape(num_rows, num_columns)
-
-    class_id = os.path.basename(os.path.dirname(sound_file))
 
     spectro_2d = cur_spectro_padded
     spectro_4d = np.expand_dims(cur_spectro_padded, axis=0)
@@ -39,6 +39,7 @@ def spektogram(sound_file = 'Samples/Orka/Orka16.wav'):
     plt.show()
 
     print("Kształt macierzy obciętego spektogramy MEL:", spectro_2d.shape)
+
 
 if __name__ == "__main__":
     spektogram()
