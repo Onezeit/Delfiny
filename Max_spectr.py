@@ -2,7 +2,6 @@ from scipy.io import wavfile
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-
 from preprocess_sound import preprocess_sound
 
 target_shape = (600, 64)

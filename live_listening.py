@@ -16,7 +16,6 @@ def map_choice_to_key(option):
         "Point Robinson": "point-robinson",
     }
 
-    # Get the selected option text
     selected_option_text = option.split(" - ")[1]
 
     return mapping.get(selected_option_text)
@@ -25,11 +24,9 @@ def map_choice_to_key(option):
 def record_audio(output_filename, duration=10, channels=1, sample_rate=44100):
     p = pyaudio.PyAudio()
 
-    # Ustawienia nagrywania
     format = pyaudio.paInt16
     frames_per_buffer = 1024
 
-    # Rozpocznij nagrywanie
     stream = p.open(format=format,
                     channels=channels,
                     rate=sample_rate,

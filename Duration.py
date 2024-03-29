@@ -1,7 +1,7 @@
 import os
 from scipy.io import wavfile
 
-folder_path = "Samples/Humbak"
+folder_path = "Samples/Train_Delfin"
 
 
 def czas_trwania(folder_path):

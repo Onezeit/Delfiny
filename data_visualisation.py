@@ -6,9 +6,9 @@ import numpy as np
 
 
 def spektogram():
-    target_shape = (1800, 64)
+    target_shape = (1000, 64)
 
-    sound_file = 'output.wav'
+    sound_file = 'mono.wav'
 
     sr, wav_data = wavfile.read(sound_file)
     wav_data = wav_data / 32768.0
@@ -33,8 +33,8 @@ def spektogram():
     plt.figure(figsize=(10, 4))
     plt.imshow(cur_spectro_padded, aspect='auto', cmap='viridis', origin='lower')
     plt.colorbar(label='Intensity (dB)')
-    plt.xlabel('Frequency Bins')
-    plt.ylabel('Time Bins')
+    plt.xlabel('Time Bins')
+    plt.ylabel('Frequency Bins')
     plt.title('Spectrogram Visualization')
     plt.show()
 
