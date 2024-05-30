@@ -3,7 +3,7 @@ import pyaudio
 import requests
 from bs4 import BeautifulSoup
 import wave
-from data_visualisation import spektogram
+from spectr_industrial import generator
 
 
 def map_choice_to_key(option):
@@ -56,7 +56,7 @@ def record_audio(output_filename, duration=10, channels=1, sample_rate=44100):
     print(f"Nagranie zapisane jako {output_filename}")
 
     # Po nagraniu uruchom funkcję spektogram z nagranym dźwiękiem
-    spektogram(output_filename)
+    generator(output_filename)
 
 
 def get_website_content(url):

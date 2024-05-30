@@ -2,12 +2,11 @@ from Model import AudioClassifier
 import torch
 import torch.nn as nn
 from data_loader import SoundDS
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch.utils.data import DataLoader, random_split
 import pandas as pd
 import os
 
-
-data_paths = ['Samples/Train_Orka', 'Samples/Train_Humbak']
+data_paths = ['Samples/Train_Delfin', 'Samples/Train_Orka']
 myds = SoundDS(data_paths)
 
 num_items = len(myds)
@@ -67,7 +66,7 @@ def training(model, train_dl, val_dl, num_epochs):
         total_prediction = 0
 
         for i, data in enumerate(train_dl):
-            inputs, labels = data[0].float(), data[1]
+            inputs, labels = data[0].float().to(device), data[1].to(device)
 
             inputs_m, inputs_s = inputs.mean(), inputs.std()
             if inputs_s > 0:
@@ -115,10 +114,10 @@ def save_model(model, path, model_name, num_epochs):
     torch.save(model.state_dict(), os.path.join(directory, f"{model_name}.pth"))
 
 
-num_epochs = 2
+num_epochs = 3
 training(myModel, train_dl, val_dl, num_epochs)
 
-model_name = "170/140"
+model_name = "27_27_delf_ork"
 model_path = "Modele"
 save_model(myModel, model_path, model_name, num_epochs)
 

@@ -1,14 +1,12 @@
-from preprocess_sound import preprocess_sound
 from torch.utils.data import Dataset
-from scipy.io import wavfile
 import numpy as np
 import os
 import glob
 import torch
-
+from Generator import generator  # Upewnij się, że importujesz funkcję generator z odpowiedniego miejsca
 
 class SoundDS(Dataset):
-    def __init__(self, data_paths, target_shape=(600, 64)):
+    def __init__(self, data_paths, target_shape=(300, 300)):
         self.files = []
         self.target_shape = target_shape
 
@@ -25,30 +23,43 @@ class SoundDS(Dataset):
 
         if "orka" in filename:
             class_idx = 0
-        elif "humbak" in filename:
+        elif "delfin" in filename:
             class_idx = 1
         else:
             class_idx = 2
 
-        sr, wav_data = wavfile.read(sound_file)
-        wav_data = wav_data / 32768.0
-        cur_spectro = preprocess_sound(wav_data, sr)
-        cur_spectro_padded = np.zeros(self.target_shape)
         try:
-            if cur_spectro.size == 0:
-                raise ValueError("Pusty spektrogram")
-
+            _, _, cur_spectro = generator(sound_file, self.target_shape)  # Rozpakowanie krotki
         except Exception as e:
             print(f"Problem z plikiem {filename}: {e}")
-            return torch.zeros(1, 224, 224), torch.tensor(0)
+            return torch.zeros(1, *self.target_shape), torch.tensor(0)
 
-        max_val_index = np.unravel_index(np.argmax(cur_spectro), cur_spectro.shape)
+        if cur_spectro.size == 0:
+            print(f"Pusty spektrogram dla pliku: {filename}")
+            return torch.zeros(1, *self.target_shape), torch.tensor(0)
 
-        time_offset = max(0, min(max_val_index[1] - self.target_shape[0] // 2, cur_spectro.shape[1] - self.target_shape[0]))
-        mel_offset = max(0, min(max_val_index[2] - self.target_shape[1] // 2, cur_spectro.shape[2] - self.target_shape[1]))
+        # Znajdź indeksy maksymalnej wartości w spektrogramie
+        max_idx = np.unravel_index(np.argmax(cur_spectro), cur_spectro.shape)
+        target_height, target_width = self.target_shape
 
-        cur_spectro_padded = cur_spectro[0, time_offset:time_offset + self.target_shape[0], mel_offset:mel_offset + self.target_shape[1]]
+        # Oblicz indeksy do przycięcia spektrogramu, aby zapewnić, że max wartość jest w centrum
+        start_freq_idx = max(0, min(max_idx[0] - target_height // 2, cur_spectro.shape[0] - target_height))
+        end_freq_idx = start_freq_idx + target_height
 
-        cur_spectro_padded = np.expand_dims(cur_spectro_padded, axis=0)
+        start_time_idx = max(0, min(max_idx[1] - target_width // 2, cur_spectro.shape[1] - target_width))
+        end_time_idx = start_time_idx + target_width
 
-        return torch.tensor(cur_spectro_padded, dtype=torch.float32), torch.tensor(class_idx, dtype=torch.long), filename
+        # Przycinanie spektrogramu do pożądanego rozmiaru
+        spectr_cropped = cur_spectro[start_freq_idx:end_freq_idx, start_time_idx:end_time_idx]
+
+
+
+        # Upewnij się, że spektrogram ma odpowiedni rozmiar (wypełnianie zerami, jeśli jest mniejszy)
+        spectro_height, spectro_width = spectr_cropped.shape
+        padded_spectro = np.zeros(self.target_shape)
+        padded_spectro[:spectro_height, :spectro_width] = spectr_cropped
+
+        # Przekształcenie spektrogramu na odpowiedni format
+        padded_spectro = np.expand_dims(padded_spectro, axis=0)
+
+        return torch.tensor(padded_spectro, dtype=torch.float32), torch.tensor(class_idx, dtype=torch.long), filename
